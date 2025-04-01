@@ -16,4 +16,10 @@ interface ApiServices {
 
     @GET("search.php")
     fun getFoodList(@Query("f") letter: String): Single<Response<ResponseFoodList>>
+
+    @GET("search.php")
+    fun getSearchFoodList(@Query("s") letter: String): Single<Response<ResponseFoodList>>
+
+    @GET("filter.php")
+    fun getFoodsByCategory(@Query("c") letter: String): Single<Response<ResponseFoodList>>
 }

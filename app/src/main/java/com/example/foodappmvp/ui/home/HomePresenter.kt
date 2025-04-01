@@ -3,8 +3,6 @@ package com.example.foodappmvp.ui.home
 import com.example.foodappmvp.base.BasePresenterImpl
 import com.example.foodappmvp.data.repository.HomeRepository
 import com.example.foodappmvp.utils.applyIoScheduler
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class HomePresenter @Inject constructor(
@@ -76,7 +74,7 @@ class HomePresenter @Inject constructor(
                     when (response.code()) {
                         in 200..202 -> {
                             response.body()?.let {
-                                if (it.meals!!.isNotEmpty()) {
+                                if (it.meals != null && it.meals.isNotEmpty()) {
                                     view.loadFoodList(it)
                                 }
                             }
@@ -87,5 +85,54 @@ class HomePresenter @Inject constructor(
                     view.foodsLoadingState(false)
                     view.serverError(it.message.toString())
                 })
-        }    }
+        }
+    }
+
+    override fun callSearchFoodList(letter: String) {
+        if (view.checkInternet()) {
+            view.foodsLoadingState(true)
+            disposable = repository.getSearchFoodList(letter)
+                .applyIoScheduler()
+                .subscribe({ response ->
+                    view.foodsLoadingState(false)
+                    when (response.code()) {
+                        in 200..202 -> {
+                            response.body()?.let {
+                                if (it.meals != null && it.meals.isNotEmpty()) {
+                                    view.loadFoodList(it)
+                                }
+                            }
+                        }
+                    }
+
+                }, {
+                    view.foodsLoadingState(false)
+                    view.serverError(it.message.toString())
+                })
+        }
+    }
+
+    override fun callFoodsByCategory(letter: String) {
+        if (view.checkInternet()) {
+            view.foodsLoadingState(true)
+            disposable = repository.getFoodsByCategory(letter)
+                .applyIoScheduler()
+                .subscribe({ response ->
+                    view.foodsLoadingState(false)
+                    when (response.code()) {
+                        in 200..202 -> {
+                            response.body()?.let {
+                                if (it.meals != null && it.meals.isNotEmpty()) {
+                                    view.loadFoodList(it)
+                                }
+                            }
+                        }
+                    }
+
+                }, {
+                    view.foodsLoadingState(false)
+                    view.serverError(it.message.toString())
+                })
+        }
+    }
 }

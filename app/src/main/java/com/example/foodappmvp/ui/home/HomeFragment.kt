@@ -1,7 +1,6 @@
 package com.example.foodappmvp.ui.home
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +19,6 @@ import com.example.foodappmvp.ui.home.adapters.CategoriesAdapter
 import com.example.foodappmvp.ui.home.adapters.FoodsAdapter
 import com.example.foodappmvp.utils.isNetworkAvailable
 import com.example.foodappmvp.utils.showSnackBar
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -67,6 +65,7 @@ class HomeFragment : Fragment(), HomeContracts.View {
                 .subscribe {
                     if (it.toString().length > 1) {
                         //Call Api
+                        presenter.callSearchFoodList(it.toString())
                     }
                 }
             //Filter
@@ -80,13 +79,9 @@ class HomeFragment : Fragment(), HomeContracts.View {
         adapter.setDropDownViewResource(R.layout.item_spinner_list)
         binding.filterSpinner.adapter = adapter
         binding.filterSpinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //Call api
+                presenter.callFoodList(filters[position].toString())
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -101,9 +96,12 @@ class HomeFragment : Fragment(), HomeContracts.View {
     override fun loadCategoriesFoodList(data: ResponseCategoriesList) {
         categoriesAdapter.setData(data.categories)
         binding.categoryList.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = categoriesAdapter
+        }
+        categoriesAdapter.setOnItemClickListener {
+            //Call api
+            presenter.callFoodsByCategory(it.strCategory.toString())
         }
     }
 

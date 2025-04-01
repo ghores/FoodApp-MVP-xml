@@ -21,7 +21,9 @@ import com.example.foodappmvp.utils.isNetworkAvailable
 import com.example.foodappmvp.utils.showSnackBar
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
+import greyfox.rxnetwork.RxNetwork
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -66,6 +68,13 @@ class HomeFragment : Fragment(), HomeContracts.View {
                 }
             //Filter
             filterFood()
+            //Check internet
+            RxNetwork.init(requireContext()).observe()
+                .subscribeOn(Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe {
+                    internetError(it.isConnected)
+                }
         }
     }
 
@@ -149,6 +158,21 @@ class HomeFragment : Fragment(), HomeContracts.View {
     }
 
     override fun internetError(hasInternet: Boolean) {
+        binding.apply {
+            if (!hasInternet){
+                homeContent.visibility = View.GONE
+                homeDisLay.visibility = View.VISIBLE
+                //Change view
+                disconnectLay.disImg.setImageResource(R.drawable.disconnect)
+                disconnectLay.disTxt.text = getString(R.string.checkInternet)
+            } else {
+                homeContent.visibility = View.VISIBLE
+                homeDisLay.visibility = View.GONE
+                //Call api
+                presenter.callCategoriesFoodList()
+                presenter.callFoodList("A")
+            }
+        }
     }
 
     override fun serverError(message: String) {

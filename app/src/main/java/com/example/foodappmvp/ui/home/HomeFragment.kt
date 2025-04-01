@@ -51,9 +51,9 @@ class HomeFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, filters)
         adapter.setDropDownViewResource(R.layout.item_spinner_list)
         binding.filterSpinner.adapter = adapter
-        binding.filterSpinner.onItemSelectedListener = object :OnItemSelectedListener{
+        binding.filterSpinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                //CAll api
+                //Call api
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

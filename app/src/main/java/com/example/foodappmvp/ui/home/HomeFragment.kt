@@ -1,6 +1,7 @@
 package com.example.foodappmvp.ui.home
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,16 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.foodappmvp.R
+import com.example.foodappmvp.data.model.home.ResponseCategoriesList
 import com.example.foodappmvp.data.model.home.ResponseFoodList
 import com.example.foodappmvp.databinding.FragmentHomeBinding
+import com.example.foodappmvp.ui.home.adapters.CategoriesAdapter
 import com.example.foodappmvp.utils.isNetworkAvailable
+import com.example.foodappmvp.utils.showSnackBar
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -28,7 +34,14 @@ class HomeFragment : Fragment(), HomeContracts.View {
     @Inject
     lateinit var presenter: HomePresenter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    @Inject
+    lateinit var categoriesAdapter: CategoriesAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -40,6 +53,7 @@ class HomeFragment : Fragment(), HomeContracts.View {
         binding.apply {
             //Call api
             presenter.callFoodRandom()
+            presenter.callCategoriesFoodList()
             //Search
             searchEdt.textChanges()
                 .skipInitialValue()
@@ -61,7 +75,12 @@ class HomeFragment : Fragment(), HomeContracts.View {
         adapter.setDropDownViewResource(R.layout.item_spinner_list)
         binding.filterSpinner.adapter = adapter
         binding.filterSpinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 //Call api
             }
 
@@ -74,10 +93,22 @@ class HomeFragment : Fragment(), HomeContracts.View {
         binding.headerImg.load(data.meals?.get(0)?.strMealThumb)
     }
 
+    override fun loadCategoriesFoodList(data: ResponseCategoriesList) {
+        categoriesAdapter.setData(data.categories)
+        binding.categoryList.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = categoriesAdapter
+        }
+    }
+
     override fun showLoading() {
+        binding.homeCategoryLoading.visibility = View.VISIBLE
+        binding.categoryList.visibility = View.GONE
     }
 
     override fun hideLoading() {
+        binding.homeCategoryLoading.visibility = View.GONE
+        binding.categoryList.visibility = View.VISIBLE
     }
 
     override fun checkInternet(): Boolean {
@@ -88,5 +119,6 @@ class HomeFragment : Fragment(), HomeContracts.View {
     }
 
     override fun serverError(message: String) {
+        binding.root.showSnackBar(message)
     }
 }

@@ -50,7 +50,7 @@ class HomePresenter @Inject constructor(
                     when (response.code()) {
                         in 200..202 -> {
                             response.body()?.let {
-                                if (it.categories.isNotEmpty()) {
+                                if (it.categories != null && it.categories.isNotEmpty()) {
                                     view.loadCategoriesFoodList(it)
                                 }
                             }

@@ -22,4 +22,7 @@ interface ApiServices {
 
     @GET("filter.php")
     fun getFoodsByCategory(@Query("c") letter: String): Single<Response<ResponseFoodList>>
+
+    @GET("lookup.php")
+    fun getFoodDetails(@Query("i") id: Int): Single<Response<ResponseFoodList>>
 }

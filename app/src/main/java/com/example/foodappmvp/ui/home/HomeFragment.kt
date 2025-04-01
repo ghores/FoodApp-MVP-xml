@@ -184,4 +184,9 @@ class HomeFragment : Fragment(), HomeContracts.View {
     override fun serverError(message: String) {
         binding.root.showSnackBar(message)
     }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.onStop()
+    }
 }

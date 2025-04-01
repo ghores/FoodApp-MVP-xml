@@ -1,7 +1,7 @@
-package com.example.foodappmvp.data.repository
+package com.example.foodappmvp.ui.detail
 
 import com.example.foodappmvp.base.BasePresenterImpl
-import com.example.foodappmvp.ui.detail.DetailContracts
+import com.example.foodappmvp.data.repository.DetailRepository
 import com.example.foodappmvp.utils.applyIoScheduler
 import javax.inject.Inject
 

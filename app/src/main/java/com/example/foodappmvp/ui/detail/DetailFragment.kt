@@ -13,8 +13,9 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.example.foodappmvp.R
 import com.example.foodappmvp.data.model.home.ResponseFoodList
-import com.example.foodappmvp.data.repository.DetailPresenter
 import com.example.foodappmvp.databinding.FragmentDetailBinding
+import com.example.foodappmvp.ui.detail.player.PlayerActivity
+import com.example.foodappmvp.utils.VIDEO_ID
 import com.example.foodappmvp.utils.isNetworkAvailable
 import com.example.foodappmvp.utils.showSnackBar
 import com.google.gson.Gson
@@ -82,7 +83,11 @@ class DetailFragment : Fragment(), DetailContracts.View {
                 if (itMeal.strYoutube != null) {
                     foodPlayImg.visibility = View.VISIBLE
                     foodPlayImg.setOnClickListener {
-
+                        val videoId = itMeal.strYoutube.split("=")[1]
+                        Intent(requireContext(), PlayerActivity::class.java).also {
+                            it.putExtra(VIDEO_ID, videoId)
+                            startActivity(it)
+                        }
                     }
                 } else {
                     foodPlayImg.visibility = View.GONE
@@ -149,5 +154,10 @@ class DetailFragment : Fragment(), DetailContracts.View {
 
     override fun serverError(message: String) {
         binding.root.showSnackBar(message)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.onStop()
     }
 }

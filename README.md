@@ -1,5 +1,5 @@
 # Food App with kotlin
-Food App using the API from https://www.themealdb.com/
+Food App using the API from https://www.themealdb.com
 
 
 The technologies used in this project consist of:

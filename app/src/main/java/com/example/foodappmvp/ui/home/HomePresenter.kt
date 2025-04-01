@@ -100,6 +100,8 @@ class HomePresenter @Inject constructor(
                             response.body()?.let {
                                 if (it.meals != null && it.meals.isNotEmpty()) {
                                     view.loadFoodList(it)
+                                } else {
+                                    view.emptyList()
                                 }
                             }
                         }

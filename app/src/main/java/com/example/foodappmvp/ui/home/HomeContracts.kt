@@ -11,6 +11,7 @@ interface HomeContracts {
         fun loadCategoriesFoodList(data: ResponseCategoriesList)
         fun loadFoodList(data: ResponseFoodList)
         fun foodsLoadingState(isShown: Boolean)
+        fun emptyList()
     }
 
     interface Presenter : BasePresenter {

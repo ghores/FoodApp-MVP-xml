@@ -33,7 +33,7 @@ class CategoriesAdapter @Inject constructor() : RecyclerView.Adapter<CategoriesA
     override fun getItemCount() = categoryList.size
 
     inner class ViewHolder : RecyclerView.ViewHolder(binding.root) {
-        @SuppressLint("SetTextI18n")
+        @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
         fun bind(item: ResponseCategoriesList.Category) {
             binding.apply {
                 itemCategoriesImg.load(item.strCategoryThumb) {

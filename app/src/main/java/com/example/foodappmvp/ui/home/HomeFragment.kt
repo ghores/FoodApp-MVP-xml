@@ -39,11 +39,7 @@ class HomeFragment : Fragment(), HomeContracts.View {
     @Inject
     lateinit var foodsAdapter: FoodsAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -106,6 +102,9 @@ class HomeFragment : Fragment(), HomeContracts.View {
     }
 
     override fun loadFoodList(data: ResponseFoodList) {
+        //Visibility mode
+        binding.foodsList.visibility = View.VISIBLE
+        binding.homeDisLay.visibility = View.GONE
         foodsAdapter.setData(data.meals)
         binding.foodsList.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -122,6 +121,16 @@ class HomeFragment : Fragment(), HomeContracts.View {
                 homeFoodsLoading.visibility = View.GONE
                 foodsList.visibility = View.VISIBLE
             }
+        }
+    }
+
+    override fun emptyList() {
+        binding.apply {
+            foodsList.visibility = View.GONE
+            homeDisLay.visibility = View.VISIBLE
+            //Change view
+            disconnectLay.disImg.setImageResource(R.drawable.box)
+            disconnectLay.disTxt.text = getString(R.string.emptyList)
         }
     }
 

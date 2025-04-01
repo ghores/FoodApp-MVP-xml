@@ -9,10 +9,13 @@ interface HomeContracts {
     interface View : BaseView {
         fun loadFoodRandom(data: ResponseFoodList)
         fun loadCategoriesFoodList(data: ResponseCategoriesList)
+        fun loadFoodList(data: ResponseFoodList)
+        fun foodsLoadingState(isShown: Boolean)
     }
 
     interface Presenter : BasePresenter {
         fun callFoodRandom()
         fun callCategoriesFoodList()
+        fun callFoodList(letter: String)
     }
 }

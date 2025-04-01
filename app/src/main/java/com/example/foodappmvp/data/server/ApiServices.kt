@@ -5,6 +5,7 @@ import com.example.foodappmvp.data.model.home.ResponseFoodList
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ApiServices {
     @GET("random.php")
@@ -12,4 +13,7 @@ interface ApiServices {
 
     @GET("categories.php")
     fun getCategoriesFoodList(): Single<Response<ResponseCategoriesList>>
+
+    @GET("search.php")
+    fun getFoodList(@Query("f") letter: String): Single<Response<ResponseFoodList>>
 }

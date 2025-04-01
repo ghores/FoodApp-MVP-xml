@@ -65,4 +65,27 @@ class HomePresenter @Inject constructor(
                 })
         }
     }
+
+    override fun callFoodList(letter: String) {
+        if (view.checkInternet()) {
+            view.foodsLoadingState(true)
+            disposable = repository.getFoodList(letter)
+                .applyIoScheduler()
+                .subscribe({ response ->
+                    view.foodsLoadingState(false)
+                    when (response.code()) {
+                        in 200..202 -> {
+                            response.body()?.let {
+                                if (it.meals!!.isNotEmpty()) {
+                                    view.loadFoodList(it)
+                                }
+                            }
+                        }
+                    }
+
+                }, {
+                    view.foodsLoadingState(false)
+                    view.serverError(it.message.toString())
+                })
+        }    }
 }

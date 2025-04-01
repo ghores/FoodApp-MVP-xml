@@ -17,6 +17,7 @@ import com.example.foodappmvp.data.model.home.ResponseCategoriesList
 import com.example.foodappmvp.data.model.home.ResponseFoodList
 import com.example.foodappmvp.databinding.FragmentHomeBinding
 import com.example.foodappmvp.ui.home.adapters.CategoriesAdapter
+import com.example.foodappmvp.ui.home.adapters.FoodsAdapter
 import com.example.foodappmvp.utils.isNetworkAvailable
 import com.example.foodappmvp.utils.showSnackBar
 import com.google.android.material.snackbar.Snackbar
@@ -37,6 +38,9 @@ class HomeFragment : Fragment(), HomeContracts.View {
     @Inject
     lateinit var categoriesAdapter: CategoriesAdapter
 
+    @Inject
+    lateinit var foodsAdapter: FoodsAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,6 +58,7 @@ class HomeFragment : Fragment(), HomeContracts.View {
             //Call api
             presenter.callFoodRandom()
             presenter.callCategoriesFoodList()
+            presenter.callFoodList("A")
             //Search
             searchEdt.textChanges()
                 .skipInitialValue()
@@ -96,8 +101,29 @@ class HomeFragment : Fragment(), HomeContracts.View {
     override fun loadCategoriesFoodList(data: ResponseCategoriesList) {
         categoriesAdapter.setData(data.categories)
         binding.categoryList.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = categoriesAdapter
+        }
+    }
+
+    override fun loadFoodList(data: ResponseFoodList) {
+        foodsAdapter.setData(data.meals)
+        binding.foodsList.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = foodsAdapter
+        }
+    }
+
+    override fun foodsLoadingState(isShown: Boolean) {
+        binding.apply {
+            if (isShown) {
+                homeFoodsLoading.visibility = View.VISIBLE
+                foodsList.visibility = View.GONE
+            } else {
+                homeFoodsLoading.visibility = View.GONE
+                foodsList.visibility = View.VISIBLE
+            }
         }
     }
 

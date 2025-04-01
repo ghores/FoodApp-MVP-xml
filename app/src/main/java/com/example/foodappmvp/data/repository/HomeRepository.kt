@@ -10,4 +10,5 @@ import javax.inject.Inject
 class HomeRepository @Inject constructor(private val api: ApiServices) {
     fun getFoodRandom(): Single<Response<ResponseFoodList>> = api.getFoodRandom()
     fun getCategoriesFoodList(): Single<Response<ResponseCategoriesList>> = api.getCategoriesFoodList()
+    fun getFoodList(letter: String): Single<Response<ResponseFoodList>> = api.getFoodList(letter)
 }

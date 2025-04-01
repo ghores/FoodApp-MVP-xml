@@ -85,4 +85,5 @@ dependencies {
     //Other
     implementation ("com.flaviofaria:kenburnsview:1.0.7")
     implementation ("it.greyfox:rxnetwork:0.0.5")
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }

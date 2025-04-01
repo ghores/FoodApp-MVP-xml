@@ -1,4 +1,4 @@
-# Food App with kotlin **xml**
+# Food App with kotlin
 Food App using the API from https://www.themealdb.com/
 
 

@@ -58,7 +58,6 @@ class HomeFragment : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
-
         }
     }
 }

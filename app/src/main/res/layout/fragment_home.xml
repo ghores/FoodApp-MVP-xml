@@ -41,7 +41,7 @@
             android:layout_marginVertical="5dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_circle_white"
-            android:dropDownVerticalOffset="50dp"
+            android:dropDownVerticalOffset="30dp"
             android:elevation="3dp"
             android:overlapAnchor="false"
             android:popupBackground="@drawable/bg_circle_white"
